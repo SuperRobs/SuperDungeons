@@ -1,6 +1,4 @@
-﻿using System.Windows;
-
-namespace SuperDungeons;
+﻿namespace SuperDungeons;
 
 public partial class App
 {
