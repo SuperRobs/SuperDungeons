@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperDungeons", "SuperDungeons\SuperDungeons.csproj", "{D831F59A-60DF-4FBA-AB6C-7C210BD1F5B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{0366909D-F41B-4C15-8557-19677A3C678E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D831F59A-60DF-4FBA-AB6C-7C210BD1F5B3} = {D831F59A-60DF-4FBA-AB6C-7C210BD1F5B3}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D831F59A-60DF-4FBA-AB6C-7C210BD1F5B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D831F59A-60DF-4FBA-AB6C-7C210BD1F5B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D831F59A-60DF-4FBA-AB6C-7C210BD1F5B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D831F59A-60DF-4FBA-AB6C-7C210BD1F5B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0366909D-F41B-4C15-8557-19677A3C678E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0366909D-F41B-4C15-8557-19677A3C678E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0366909D-F41B-4C15-8557-19677A3C678E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0366909D-F41B-4C15-8557-19677A3C678E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
