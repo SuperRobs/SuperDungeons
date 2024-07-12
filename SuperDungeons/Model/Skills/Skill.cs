@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 using SuperDungeons.Model.Abilities;
-using SuperDungeons.Model.Character;
+using SuperDungeons.Model.Classes;
 using SuperDungeons.Model.DataTypes.Enums;
 
 namespace SuperDungeons.Model.Skills;
@@ -10,17 +10,17 @@ namespace SuperDungeons.Model.Skills;
 public class Skill : BindableObject
 {
     private readonly AbilityScores _scores;
-    private readonly CharacterOverview _overview;
+    private readonly ClassManager _classManager;
 
-    public Skill(string identifier, Ability ability, AbilityScores scores, CharacterOverview overview)
+    public Skill(string identifier, Ability ability, AbilityScores scores, ClassManager overview)
     {
         _scores = scores;
-        _overview = overview;
+        _classManager = overview;
         Identifier = identifier;
         AssociatedAbility = ability;
 
         _scores.PropertyChanged += ScoresChanged;
-        _overview.PropertyChanged += OverviewChanged;
+        _classManager.PropertyChanged += OverviewChanged;
     }
 
     public string Identifier { get; }
@@ -44,7 +44,7 @@ public class Skill : BindableObject
     public int GetModifier()
     {
         var abilityModifier = _scores.GetAbilityModifier(AssociatedAbility);
-        var proficiencyBonus = _overview.GetProficiencyBonus();
+        var proficiencyBonus = _classManager.GetProficiencyBonus();
         switch (Proficiency)
         {
             case ProficiencyType.None:
@@ -82,7 +82,7 @@ public class Skill : BindableObject
         // ReSharper disable once ConvertIfStatementToSwitchStatement for consistency with other method where switch is
         // not possible
         if (e.PropertyName == null) return;
-        if (e.PropertyName.Equals(nameof(_overview.GetProficiencyBonus)))
+        if (e.PropertyName.Equals(nameof(_classManager.GetProficiencyBonus)))
         {
             OnPropertyChanged(Identifier);
         }

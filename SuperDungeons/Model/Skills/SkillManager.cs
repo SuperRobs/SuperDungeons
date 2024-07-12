@@ -1,6 +1,6 @@
 ﻿using System.Collections.Immutable;
 using SuperDungeons.Model.Abilities;
-using SuperDungeons.Model.Character;
+using SuperDungeons.Model.Classes;
 
 namespace SuperDungeons.Model.Skills;
 
@@ -9,12 +9,12 @@ public class SkillManager : BindableObject
     private readonly IImmutableSet<Skill> _saves;
     private readonly HashSet<Skill> _skills;
     private readonly AbilityScores _scores;
-    private readonly CharacterOverview _overview;
+    private readonly ClassManager _classManager;
 
-    public SkillManager(AbilityScores scores, CharacterOverview overview)
+    public SkillManager(AbilityScores scores, ClassManager classManager)
     {
         _scores = scores;
-        _overview = overview;
+        _classManager = classManager;
         _saves = 
         [
             ConstructSkill("Strength SavingThrows", Ability.Strength), 
@@ -104,6 +104,6 @@ public class SkillManager : BindableObject
     
     private Skill ConstructSkill(string identifier, Ability ability)
     {
-        return new Skill(identifier, ability, _scores, _overview);
+        return new Skill(identifier, ability, _scores, _classManager);
     }
 }

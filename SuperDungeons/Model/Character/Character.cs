@@ -10,16 +10,31 @@ namespace SuperDungeons.Model.Character;
 
 public sealed class Character : BindableObject
 {
-    public Character()
+    private bool _hasInspiration;
+    private string _name = "";
+    
+    public string Name
     {
-        //temp values for testing
-        //ToDo make a characterBuilder or something to make a character with sensible values
-        Overview = new CharacterOverview("", this);
-        AbilityScores = new AbilityScores(10, 10, 10, 10, 10, 10);
-        ClassManager = new();
+        get => _name;
+        set
+        {
+            _name = value;
+            OnPropertyChanged(nameof(Name));
+        }
     }
 
-    public CharacterOverview Overview { get; }
-    public AbilityScores AbilityScores { get; }
-    public ClassManager ClassManager { get; }
+    public bool HasInspiration
+    {
+        get => _hasInspiration;
+        set
+        {
+            _hasInspiration = value;
+            OnPropertyChanged(nameof(HasInspiration));
+        }
+    }
+
+    //ToDo make a characterBuilder or something to make a character with sensible values
+    
+    public AbilityScores AbilityScores { get; } = new(10, 10, 10, 10, 10, 10);
+    public ClassManager ClassManager { get; } = new();
 }
