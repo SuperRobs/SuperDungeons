@@ -13,11 +13,11 @@ public interface IFeature
     /// </summary>
     string GetSource();
     /// <summary>
-    /// Applies the Feature, must do nothing if called multiple times
+    /// Applies the Feature, must be idempotent
     /// </summary>
     void Apply();
     /// <summary>
-    /// Removes the Feature, must do nothing if the feature is not applied (including when being called multiple times)
+    /// Removes the Feature, must be idempotent
     /// Must undo everything Apply() does
     /// </summary>
     void Remove();

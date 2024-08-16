@@ -1,5 +1,4 @@
 ﻿using SuperDungeons.Model.Abilities;
-using SuperDungeons.Model.DataTypes.Enums;
 
 namespace Tests.ModelTests.Abilities;
 
