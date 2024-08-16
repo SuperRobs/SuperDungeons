@@ -1,5 +1,4 @@
 ﻿using SuperDungeons.Model.Abilities;
-using SuperDungeons.Model.DataTypes.Enums;
 
 namespace Tests.ModelTests.Abilities;
 
@@ -256,17 +255,4 @@ public class AbilityScoreTests
         //Assert
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(20));
     }
-    
-    //Reset
-    
-    //Test cases necessary
-    //for each target
-        //for eachType
-        //it suffices to check strength for all
-            //check if setting, removing, and overriding work
-            //check positive and negative values
-            //check if clearing works
-            //check if mixed bonuses and overrides work
-    
-    
 }
