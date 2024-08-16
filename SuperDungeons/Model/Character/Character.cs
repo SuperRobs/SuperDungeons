@@ -4,7 +4,7 @@ using SuperDungeons.Model.Classes;
 namespace SuperDungeons.Model.Character;
 
 //This class is more of a Data Structure than anything else, it only exposes its components, so it causes coupling
-//between users of this class and the components they use. As this is only a DataStructure that is okay,exposing all
+//between users of this class and the components they use. As this is only a DataStructure that is okay, exposing all
 //the necessary methods directly via this class would cause a really long class and be far less maintainable
 
 
