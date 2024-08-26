@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics;
+using SuperDungeons.Model.Features;
+using SuperDungeons.Utils;
 
 namespace SuperDungeons.Model.Abilities;
 
@@ -30,7 +32,7 @@ public class AbilityScores(
         return (int)Math.Floor(((int)GetAbilityScore(ability) - 10) / 2.0);
     }
     
-    public void AddBonus(BonusTargets target, BonusTypes type, Ability ability, string source, int value)
+    public void AddBonus(BonusTargets target, BonusTypes type, Ability ability, FeatureIdentifier source, int value)
     {
         //verify parameters
         if (!VerifyParameters(target, type, source, value)) return;
@@ -41,7 +43,7 @@ public class AbilityScores(
         OnPropertyChanged(ability.ToString());
     }
 
-    public void RemoveBonus(BonusTargets target, BonusTypes type, Ability ability, string source)
+    public void RemoveBonus(BonusTargets target, BonusTypes type, Ability ability, FeatureIdentifier source)
     {
         //verify
         if (!VerifyParameters(target, type, source)) return;
@@ -59,7 +61,7 @@ public class AbilityScores(
         _minimum.Reset();
     }
 
-    private static bool VerifyParameters(BonusTargets target, BonusTypes type, string source, int value)
+    private static bool VerifyParameters(BonusTargets target, BonusTypes type, FeatureIdentifier source, int value)
     {
         if (!VerifyParameters(target, type, source))
         {
@@ -76,7 +78,7 @@ public class AbilityScores(
         return true;
     }
     
-    private static bool VerifyParameters(BonusTargets target, BonusTypes type, string source)
+    private static bool VerifyParameters(BonusTargets target, BonusTypes type, FeatureIdentifier source)
     {
         if (target is not (BonusTargets.Maximum or BonusTargets.Minimum or BonusTargets.Score))
         {
@@ -111,8 +113,7 @@ public class AbilityScores(
         switch (type)
         {
             case BonusTypes.Fixed:
-                //this cast should be unproblematic, as it should have been tested beforehand that this is not negative
-                //ToDo important! add test case, this is a bug waiting to happen
+                if (value < 0) return;
                 target.AddFixedBound(key, (uint) value);
                 break;
             case BonusTypes.Change:

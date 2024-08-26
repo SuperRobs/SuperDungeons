@@ -1,4 +1,5 @@
 ﻿using SuperDungeons.Model.Abilities;
+using SuperDungeons.Model.Features;
 
 namespace Tests.ModelTests.Abilities;
 
@@ -14,7 +15,7 @@ public class AbilityMinimumTests
         //Arrange
         AbilityScores scores = new(0, 0, 0, 0, 0, 0);
         //Act
-        scores.AddBonus(BonusTargets.Minimum, BonusTypes.Change, Ability.Strength, "Test", 1);
+        scores.AddBonus(BonusTargets.Minimum, BonusTypes.Change, Ability.Strength, new FeatureIdentifier("Test", "Tests"), 1);
         //Assert
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(2));
     }
@@ -26,7 +27,7 @@ public class AbilityMinimumTests
         //Arrange
         AbilityScores scores = new(0, 0, 0, 0, 0, 0);        
         //Act
-        scores.AddBonus(BonusTargets.Minimum, BonusTypes.Change, Ability.Strength, "Test", -1);
+        scores.AddBonus(BonusTargets.Minimum, BonusTypes.Change, Ability.Strength, new FeatureIdentifier("Test", "Tests"), -1);
         //Assert
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(0));
     }
@@ -38,8 +39,8 @@ public class AbilityMinimumTests
         //Arrange
         AbilityScores scores = new(0, 0, 0, 0, 0, 0);        
         //Act
-        scores.AddBonus(BonusTargets.Minimum, BonusTypes.Change, Ability.Strength, "Test", 1);
-        scores.RemoveBonus(BonusTargets.Minimum, BonusTypes.Change, Ability.Strength, "Test");
+        scores.AddBonus(BonusTargets.Minimum, BonusTypes.Change, Ability.Strength, new FeatureIdentifier("Test", "Tests"), 1);
+        scores.RemoveBonus(BonusTargets.Minimum, BonusTypes.Change, Ability.Strength, new FeatureIdentifier("Test", "Tests"));
         //Assert
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(1));
     }
@@ -51,7 +52,7 @@ public class AbilityMinimumTests
         //Arrange
         AbilityScores scores = new(0, 0, 0, 0, 0, 0);        
         //Act
-        scores.RemoveBonus(BonusTargets.Minimum, BonusTypes.Change, Ability.Strength, "Test");
+        scores.RemoveBonus(BonusTargets.Minimum, BonusTypes.Change, Ability.Strength, new FeatureIdentifier("Test", "Tests"));
         //Assert
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(1));
     }
@@ -63,8 +64,8 @@ public class AbilityMinimumTests
         //Arrange
         AbilityScores scores = new(0, 0, 0, 0, 0, 0);        
         //Act
-        scores.AddBonus(BonusTargets.Minimum, BonusTypes.Change, Ability.Strength, "Test", 1);
-        scores.RemoveBonus(BonusTargets.Minimum, BonusTypes.Change, Ability.Strength, "Other");
+        scores.AddBonus(BonusTargets.Minimum, BonusTypes.Change, Ability.Strength, new FeatureIdentifier("Test", "Tests"), 1);
+        scores.RemoveBonus(BonusTargets.Minimum, BonusTypes.Change, Ability.Strength, new FeatureIdentifier("Other", "Tests"));
         //Assert
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(2));
     }
@@ -76,7 +77,7 @@ public class AbilityMinimumTests
         //Arrange
         AbilityScores scores = new(0, 0, 0, 0, 0, 0);        
         //Act
-        scores.AddBonus(BonusTargets.Minimum, BonusTypes.Change, Ability.Strength, "Test", 1);
+        scores.AddBonus(BonusTargets.Minimum, BonusTypes.Change, Ability.Strength, new FeatureIdentifier("Test", "Tests"), 1);
         scores.Reset();
         //Assert
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(1));
@@ -89,7 +90,7 @@ public class AbilityMinimumTests
         //Arrange
         AbilityScores scores = new(0, 0, 0, 0, 0, 0);        
         //Act
-        scores.AddBonus(BonusTargets.Minimum, BonusTypes.Fixed, Ability.Strength, "Test", 10);
+        scores.AddBonus(BonusTargets.Minimum, BonusTypes.Fixed, Ability.Strength, new FeatureIdentifier("Test", "Tests"), 10);
         //Assert
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(10));
     }
@@ -103,7 +104,7 @@ public class AbilityMinimumTests
         //Arrange
         AbilityScores scores = new(0, 0, 0, 0, 0, 0);       
         //Act
-        scores.AddBonus(BonusTargets.Minimum, BonusTypes.Fixed, Ability.Strength, "Test", -1);
+        scores.AddBonus(BonusTargets.Minimum, BonusTypes.Fixed, Ability.Strength, new FeatureIdentifier("Test", "Tests"), -1);
         //Assert
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(1));
     }
@@ -115,7 +116,7 @@ public class AbilityMinimumTests
         //Arrange
         AbilityScores scores = new(0, 0, 0, 0, 0, 0);      
         //Act
-        scores.AddBonus(BonusTargets.Minimum, BonusTypes.Fixed, Ability.Strength, "Test", 10);
+        scores.AddBonus(BonusTargets.Minimum, BonusTypes.Fixed, Ability.Strength, new FeatureIdentifier("Test", "Tests"), 10);
         //Assert
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(10));
     }
@@ -127,8 +128,8 @@ public class AbilityMinimumTests
         //Arrange
         AbilityScores scores = new(0, 0, 0, 0, 0, 0);    
         //Act
-        scores.AddBonus(BonusTargets.Minimum, BonusTypes.Fixed, Ability.Strength, "Test", 10);
-        scores.RemoveBonus(BonusTargets.Minimum, BonusTypes.Fixed, Ability.Strength, "Test");
+        scores.AddBonus(BonusTargets.Minimum, BonusTypes.Fixed, Ability.Strength, new FeatureIdentifier("Test", "Tests"), 10);
+        scores.RemoveBonus(BonusTargets.Minimum, BonusTypes.Fixed, Ability.Strength, new FeatureIdentifier("Test", "Tests"));
         //Assert
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(1));
     }
@@ -140,7 +141,7 @@ public class AbilityMinimumTests
         //Arrange
         AbilityScores scores = new(0, 0, 0, 0, 0, 0);    
         //Act
-        scores.RemoveBonus(BonusTargets.Minimum, BonusTypes.Fixed, Ability.Strength, "Test");
+        scores.RemoveBonus(BonusTargets.Minimum, BonusTypes.Fixed, Ability.Strength, new FeatureIdentifier("Test", "Tests"));
         //Assert
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(1));
     }
@@ -152,8 +153,8 @@ public class AbilityMinimumTests
         //Arrange
         AbilityScores scores = new(0, 0, 0, 0, 0, 0);     
         //Act
-        scores.AddBonus(BonusTargets.Minimum, BonusTypes.Fixed, Ability.Strength, "Test", 10);
-        scores.RemoveBonus(BonusTargets.Minimum, BonusTypes.Fixed, Ability.Strength, "Other");
+        scores.AddBonus(BonusTargets.Minimum, BonusTypes.Fixed, Ability.Strength, new FeatureIdentifier("Test", "Tests"), 10);
+        scores.RemoveBonus(BonusTargets.Minimum, BonusTypes.Fixed, Ability.Strength, new FeatureIdentifier("Other", "Tests"));
         //Assert
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(10));
     }
@@ -165,7 +166,7 @@ public class AbilityMinimumTests
         //Arrange
         AbilityScores scores = new(0, 0, 0, 0, 0, 0);     
         //Act
-        scores.AddBonus(BonusTargets.Minimum, BonusTypes.Fixed, Ability.Strength, "Test", 10);
+        scores.AddBonus(BonusTargets.Minimum, BonusTypes.Fixed, Ability.Strength, new FeatureIdentifier("Test", "Tests"), 10);
         scores.Reset();
         //Assert
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(1));
@@ -178,8 +179,8 @@ public class AbilityMinimumTests
         //Arrange
         AbilityScores scores = new(0, 0, 0, 0, 0, 0);     
         //Act
-        scores.AddBonus(BonusTargets.Minimum, BonusTypes.Fixed, Ability.Strength, "Test", 10);
-        scores.AddBonus(BonusTargets.Minimum, BonusTypes.Change, Ability.Strength, "Test", 1);
+        scores.AddBonus(BonusTargets.Minimum, BonusTypes.Fixed, Ability.Strength, new FeatureIdentifier("Test", "Tests"), 10);
+        scores.AddBonus(BonusTargets.Minimum, BonusTypes.Change, Ability.Strength, new FeatureIdentifier("Test", "Tests"), 1);
         //Assert
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(11));
     }
@@ -192,7 +193,7 @@ public class AbilityMinimumTests
         //Arrange
         AbilityScores scores = new(10, 10, 10, 10, 10, 10);
         //Act
-        scores.AddBonus(BonusTargets.Minimum, BonusTypes.Fixed, Ability.Strength, "Test", 3);
+        scores.AddBonus(BonusTargets.Minimum, BonusTypes.Fixed, Ability.Strength, new FeatureIdentifier("Test", "Tests"), 3);
         //Assert
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(10));
     }

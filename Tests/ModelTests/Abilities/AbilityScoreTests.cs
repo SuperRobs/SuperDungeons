@@ -1,4 +1,5 @@
 ﻿using SuperDungeons.Model.Abilities;
+using SuperDungeons.Model.Features;
 
 namespace Tests.ModelTests.Abilities;
 
@@ -74,7 +75,7 @@ public class AbilityScoreTests
         //Arrange
         AbilityScores scores = new(10, 10, 10, 10, 10, 10);
         //Act
-        scores.AddBonus(BonusTargets.Score, BonusTypes.Change, Ability.Strength, "Test", 1);
+        scores.AddBonus(BonusTargets.Score, BonusTypes.Change, Ability.Strength, new FeatureIdentifier("Test", "Tests"), 1);
         //Assert
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(11));
     }
@@ -86,7 +87,7 @@ public class AbilityScoreTests
         //Arrange
         AbilityScores scores = new(10, 10, 10, 10, 10, 10);
         //Act
-        scores.AddBonus(BonusTargets.Score, BonusTypes.Change, Ability.Strength, "Test", -1);
+        scores.AddBonus(BonusTargets.Score, BonusTypes.Change, Ability.Strength, new FeatureIdentifier("Test", "Tests"), -1);
         //Assert
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(9));
     }
@@ -98,8 +99,8 @@ public class AbilityScoreTests
         //Arrange
         AbilityScores scores = new(10, 10, 10, 10, 10, 10);
         //Act
-        scores.AddBonus(BonusTargets.Score, BonusTypes.Change, Ability.Strength, "Test", 1);
-        scores.RemoveBonus(BonusTargets.Score, BonusTypes.Change, Ability.Strength, "Test");
+        scores.AddBonus(BonusTargets.Score, BonusTypes.Change, Ability.Strength, new FeatureIdentifier("Test", "Tests"), 1);
+        scores.RemoveBonus(BonusTargets.Score, BonusTypes.Change, Ability.Strength, new FeatureIdentifier("Test", "Tests"));
         //Assert
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(10));
     }
@@ -111,7 +112,7 @@ public class AbilityScoreTests
         //Arrange
         AbilityScores scores = new(10, 10, 10, 10, 10, 10);
         //Act
-        scores.RemoveBonus(BonusTargets.Score, BonusTypes.Change, Ability.Strength, "Test");
+        scores.RemoveBonus(BonusTargets.Score, BonusTypes.Change, Ability.Strength, new FeatureIdentifier("Test", "Tests"));
         //Assert
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(10));
     }
@@ -123,8 +124,8 @@ public class AbilityScoreTests
         //Arrange
         AbilityScores scores = new(10, 10, 10, 10, 10, 10);
         //Act
-        scores.AddBonus(BonusTargets.Score, BonusTypes.Change, Ability.Strength, "Test", 1);
-        scores.RemoveBonus(BonusTargets.Score, BonusTypes.Change, Ability.Strength, "Other");
+        scores.AddBonus(BonusTargets.Score, BonusTypes.Change, Ability.Strength, new FeatureIdentifier("Test", "Tests"), 1);
+        scores.RemoveBonus(BonusTargets.Score, BonusTypes.Change, Ability.Strength, new FeatureIdentifier("Other", "Tests"));
         //Assert
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(11));
     }
@@ -136,7 +137,7 @@ public class AbilityScoreTests
         //Arrange
         AbilityScores scores = new(10, 10, 10, 10, 10, 10);
         //Act
-        scores.AddBonus(BonusTargets.Score, BonusTypes.Change, Ability.Strength, "Test", 1);
+        scores.AddBonus(BonusTargets.Score, BonusTypes.Change, Ability.Strength, new FeatureIdentifier("Test", "Tests"), 1);
         scores.Reset();
         //Assert
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(10));
@@ -149,7 +150,7 @@ public class AbilityScoreTests
         //Arrange
         AbilityScores scores = new(10, 10, 10, 10, 10, 10);
         //Act
-        scores.AddBonus(BonusTargets.Score, BonusTypes.Fixed, Ability.Strength, "Test", 11);
+        scores.AddBonus(BonusTargets.Score, BonusTypes.Fixed, Ability.Strength, new FeatureIdentifier("Test", "Tests"), 11);
         //Assert
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(11));
     }
@@ -163,7 +164,7 @@ public class AbilityScoreTests
         //Arrange
         AbilityScores scores = new(10, 10, 10, 10, 10, 10);
         //Act
-        scores.AddBonus(BonusTargets.Score, BonusTypes.Fixed, Ability.Strength, "Test", -1);
+        scores.AddBonus(BonusTargets.Score, BonusTypes.Fixed, Ability.Strength, new FeatureIdentifier("Test", "Tests"), -1);
         //Assert
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(10));
     }
@@ -175,7 +176,7 @@ public class AbilityScoreTests
         //Arrange
         AbilityScores scores = new(10, 10, 10, 10, 10, 10);
         //Act
-        scores.AddBonus(BonusTargets.Score, BonusTypes.Fixed, Ability.Strength, "Test", 9);
+        scores.AddBonus(BonusTargets.Score, BonusTypes.Fixed, Ability.Strength, new FeatureIdentifier("Test", "Tests"), 9);
         //Assert
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(9));
     }
@@ -187,8 +188,8 @@ public class AbilityScoreTests
         //Arrange
         AbilityScores scores = new(10, 10, 10, 10, 10, 10);
         //Act
-        scores.AddBonus(BonusTargets.Score, BonusTypes.Fixed, Ability.Strength, "Test", 11);
-        scores.RemoveBonus(BonusTargets.Score, BonusTypes.Fixed, Ability.Strength, "Test");
+        scores.AddBonus(BonusTargets.Score, BonusTypes.Fixed, Ability.Strength, new FeatureIdentifier("Test", "Tests"), 11);
+        scores.RemoveBonus(BonusTargets.Score, BonusTypes.Fixed, Ability.Strength, new FeatureIdentifier("Test", "Tests"));
         //Assert
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(10));
     }
@@ -200,7 +201,7 @@ public class AbilityScoreTests
         //Arrange
         AbilityScores scores = new(10, 10, 10, 10, 10, 10);
         //Act
-        scores.RemoveBonus(BonusTargets.Score, BonusTypes.Fixed, Ability.Strength, "Test");
+        scores.RemoveBonus(BonusTargets.Score, BonusTypes.Fixed, Ability.Strength, new FeatureIdentifier("Test", "Tests"));
         //Assert
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(10));
     }
@@ -212,8 +213,8 @@ public class AbilityScoreTests
         //Arrange
         AbilityScores scores = new(10, 10, 10, 10, 10, 10);
         //Act
-        scores.AddBonus(BonusTargets.Score, BonusTypes.Fixed, Ability.Strength, "Test", 11);
-        scores.RemoveBonus(BonusTargets.Score, BonusTypes.Fixed, Ability.Strength, "Other");
+        scores.AddBonus(BonusTargets.Score, BonusTypes.Fixed, Ability.Strength, new FeatureIdentifier("Test", "Tests"), 11);
+        scores.RemoveBonus(BonusTargets.Score, BonusTypes.Fixed, Ability.Strength, new FeatureIdentifier("Other", "Tests"));
         //Assert
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(11));
     }
@@ -225,7 +226,7 @@ public class AbilityScoreTests
         //Arrange
         AbilityScores scores = new(10, 10, 10, 10, 10, 10);
         //Act
-        scores.AddBonus(BonusTargets.Score, BonusTypes.Fixed, Ability.Strength, "Test", 1);
+        scores.AddBonus(BonusTargets.Score, BonusTypes.Fixed, Ability.Strength, new FeatureIdentifier("Test", "Tests"), 1);
         scores.Reset();
         //Assert
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(10));
@@ -238,8 +239,8 @@ public class AbilityScoreTests
         //Arrange
         AbilityScores scores = new(10, 10, 10, 10, 10, 10);
         //Act
-        scores.AddBonus(BonusTargets.Score, BonusTypes.Fixed, Ability.Strength, "Test", 11);
-        scores.AddBonus(BonusTargets.Score, BonusTypes.Change, Ability.Strength, "Test", 1);
+        scores.AddBonus(BonusTargets.Score, BonusTypes.Fixed, Ability.Strength, new FeatureIdentifier("Test", "Tests"), 11);
+        scores.AddBonus(BonusTargets.Score, BonusTypes.Change, Ability.Strength, new FeatureIdentifier("Test", "Tests"), 1);
         //Assert
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(12));
     }
@@ -251,7 +252,7 @@ public class AbilityScoreTests
         //Arrange
         AbilityScores scores = new(10, 10, 10, 10, 10, 10);
         //Act
-        scores.AddBonus(BonusTargets.Score, BonusTypes.Fixed, Ability.Strength, "Test", 21);
+        scores.AddBonus(BonusTargets.Score, BonusTypes.Fixed, Ability.Strength, new FeatureIdentifier("Test", "Tests"), 21);
         //Assert
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(20));
     }

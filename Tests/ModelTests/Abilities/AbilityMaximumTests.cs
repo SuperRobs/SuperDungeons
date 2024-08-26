@@ -1,4 +1,5 @@
 ﻿using SuperDungeons.Model.Abilities;
+using SuperDungeons.Model.Features;
 
 namespace Tests.ModelTests.Abilities;
 
@@ -14,7 +15,7 @@ public class AbilityMaximumTests
         //Arrange
         AbilityScores scores = new(30, 30, 30, 30, 30, 30);
         //Act
-        scores.AddBonus(BonusTargets.Maximum, BonusTypes.Change, Ability.Strength, "Test", 1);
+        scores.AddBonus(BonusTargets.Maximum, BonusTypes.Change, Ability.Strength, new FeatureIdentifier("Test", "Tests"), 1);
         //Assert
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(21));
     }
@@ -26,7 +27,7 @@ public class AbilityMaximumTests
         //Arrange
         AbilityScores scores = new(30, 30, 30, 30, 30, 30);
         //Act
-        scores.AddBonus(BonusTargets.Maximum, BonusTypes.Change, Ability.Strength, "Test", -1);
+        scores.AddBonus(BonusTargets.Maximum, BonusTypes.Change, Ability.Strength, new FeatureIdentifier("Test", "Tests"), -1);
         //Assert
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(19));
     }
@@ -38,8 +39,8 @@ public class AbilityMaximumTests
         //Arrange
         AbilityScores scores = new(30, 30, 30, 30, 30, 30);
         //Act
-        scores.AddBonus(BonusTargets.Maximum, BonusTypes.Change, Ability.Strength, "Test", 1);
-        scores.RemoveBonus(BonusTargets.Maximum, BonusTypes.Change, Ability.Strength, "Test");
+        scores.AddBonus(BonusTargets.Maximum, BonusTypes.Change, Ability.Strength, new FeatureIdentifier("Test", "Tests"), 1);
+        scores.RemoveBonus(BonusTargets.Maximum, BonusTypes.Change, Ability.Strength, new FeatureIdentifier("Test", "Tests"));
         //Assert
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(20));
     }
@@ -51,7 +52,7 @@ public class AbilityMaximumTests
         //Arrange
         AbilityScores scores = new(30, 30, 30, 30, 30, 30);
         //Act
-        scores.RemoveBonus(BonusTargets.Maximum, BonusTypes.Change, Ability.Strength, "Test");
+        scores.RemoveBonus(BonusTargets.Maximum, BonusTypes.Change, Ability.Strength, new FeatureIdentifier("Test", "Tests"));
         //Assert
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(20));
     }
@@ -63,8 +64,8 @@ public class AbilityMaximumTests
         //Arrange
         AbilityScores scores = new(30, 30, 30, 30, 30, 30);
         //Act
-        scores.AddBonus(BonusTargets.Maximum, BonusTypes.Change, Ability.Strength, "Test", 1);
-        scores.RemoveBonus(BonusTargets.Maximum, BonusTypes.Change, Ability.Strength, "Other");
+        scores.AddBonus(BonusTargets.Maximum, BonusTypes.Change, Ability.Strength, new FeatureIdentifier("Test", "Tests"), 1);
+        scores.RemoveBonus(BonusTargets.Maximum, BonusTypes.Change, Ability.Strength, new FeatureIdentifier("Other", "Test"));
         //Assert
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(21));
     }
@@ -76,7 +77,7 @@ public class AbilityMaximumTests
         //Arrange
         AbilityScores scores = new(30, 30, 30, 30, 30, 30);
         //Act
-        scores.AddBonus(BonusTargets.Maximum, BonusTypes.Change, Ability.Strength, "Test", 1);
+        scores.AddBonus(BonusTargets.Maximum, BonusTypes.Change, Ability.Strength, new FeatureIdentifier("Test", "Tests"), 1);
         scores.Reset();
         //Assert
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(20));
@@ -89,7 +90,7 @@ public class AbilityMaximumTests
         //Arrange
         AbilityScores scores = new(30, 30, 30, 30, 30, 30);
         //Act
-        scores.AddBonus(BonusTargets.Maximum, BonusTypes.Fixed, Ability.Strength, "Test", 21);
+        scores.AddBonus(BonusTargets.Maximum, BonusTypes.Fixed, Ability.Strength, new FeatureIdentifier("Test", "Tests"), 21);
         //Assert
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(21));
     }
@@ -103,7 +104,7 @@ public class AbilityMaximumTests
         //Arrange
         AbilityScores scores = new(30, 30, 30, 30, 30, 30);
         //Act
-        scores.AddBonus(BonusTargets.Maximum, BonusTypes.Fixed, Ability.Strength, "Test", -1);
+        scores.AddBonus(BonusTargets.Maximum, BonusTypes.Fixed, Ability.Strength, new FeatureIdentifier("Test", "Tests"), -1);
         //Assert
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(20));
     }
@@ -115,7 +116,7 @@ public class AbilityMaximumTests
         //Arrange
         AbilityScores scores = new(30, 30, 30, 30, 30, 30);
         //Act
-        scores.AddBonus(BonusTargets.Maximum, BonusTypes.Fixed, Ability.Strength, "Test", 10);
+        scores.AddBonus(BonusTargets.Maximum, BonusTypes.Fixed, Ability.Strength, new FeatureIdentifier("Test", "Tests"), 10);
         //Assert
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(10));
     }
@@ -127,8 +128,8 @@ public class AbilityMaximumTests
         //Arrange
         AbilityScores scores = new(30, 30, 30, 30, 30, 30);
         //Act
-        scores.AddBonus(BonusTargets.Maximum, BonusTypes.Fixed, Ability.Strength, "Test", 21);
-        scores.RemoveBonus(BonusTargets.Maximum, BonusTypes.Fixed, Ability.Strength, "Test");
+        scores.AddBonus(BonusTargets.Maximum, BonusTypes.Fixed, Ability.Strength, new FeatureIdentifier("Test", "Tests"), 21);
+        scores.RemoveBonus(BonusTargets.Maximum, BonusTypes.Fixed, Ability.Strength, new FeatureIdentifier("Test", "Tests"));
         //Assert
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(20));
     }
@@ -140,7 +141,7 @@ public class AbilityMaximumTests
         //Arrange
         AbilityScores scores = new(30, 30, 30, 30, 30, 30);
         //Act
-        scores.RemoveBonus(BonusTargets.Maximum, BonusTypes.Fixed, Ability.Strength, "Test");
+        scores.RemoveBonus(BonusTargets.Maximum, BonusTypes.Fixed, Ability.Strength, new FeatureIdentifier("Test", "Tests"));
         //Assert
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(20));
     }
@@ -152,8 +153,8 @@ public class AbilityMaximumTests
         //Arrange
         AbilityScores scores = new(30, 30, 30, 30, 30, 30);
         //Act
-        scores.AddBonus(BonusTargets.Maximum, BonusTypes.Fixed, Ability.Strength, "Test", 21);
-        scores.RemoveBonus(BonusTargets.Maximum, BonusTypes.Fixed, Ability.Strength, "Other");
+        scores.AddBonus(BonusTargets.Maximum, BonusTypes.Fixed, Ability.Strength, new FeatureIdentifier("Test", "Tests"), 21);
+        scores.RemoveBonus(BonusTargets.Maximum, BonusTypes.Fixed, Ability.Strength, new FeatureIdentifier("Other", "Test"));
         //Assert
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(21));
     }
@@ -165,7 +166,7 @@ public class AbilityMaximumTests
         //Arrange
         AbilityScores scores = new(30, 30, 30, 30, 30, 30);
         //Act
-        scores.AddBonus(BonusTargets.Maximum, BonusTypes.Fixed, Ability.Strength, "Test", 21);
+        scores.AddBonus(BonusTargets.Maximum, BonusTypes.Fixed, Ability.Strength, new FeatureIdentifier("Test", "Tests"), 21);
         scores.Reset();
         //Assert
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(20));
@@ -178,8 +179,8 @@ public class AbilityMaximumTests
         //Arrange
         AbilityScores scores = new(30, 30, 30, 30, 30, 30);
         //Act
-        scores.AddBonus(BonusTargets.Maximum, BonusTypes.Fixed, Ability.Strength, "Test", 21);
-        scores.AddBonus(BonusTargets.Maximum, BonusTypes.Change, Ability.Strength, "Test", 1);
+        scores.AddBonus(BonusTargets.Maximum, BonusTypes.Fixed, Ability.Strength, new FeatureIdentifier("Test", "Tests"), 21);
+        scores.AddBonus(BonusTargets.Maximum, BonusTypes.Change, Ability.Strength, new FeatureIdentifier("Test", "Tests"), 1);
         //Assert
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(22));
     }
