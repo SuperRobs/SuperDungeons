@@ -1,24 +1,15 @@
 ﻿namespace SuperDungeons.Model.Features;
 
-//The term feature will describe Features and Traits from any source (Items, Classes, Races, Feats, ...)
-/// <summary>
-/// Features must adhere to the conditions detailed in the different method summaries!
-/// </summary>
 public interface IFeature
 {
-    string GetTitle();
-    string GetDescription();
     /// <summary>
-    /// Source must always be unique, or it could override (or get overridden by) other bonuses with the same name!
+    /// the Identifier must always be unique across the entire application!
     /// </summary>
-    string GetSource();
-    /// <summary>
-    /// Applies the Feature, must be idempotent
-    /// </summary>
+    FeatureIdentifier Identifier { get; }
+    string Description { get; }
     void Apply();
     /// <summary>
-    /// Removes the Feature, must be idempotent
-    /// Must undo everything Apply() does
+    /// Remove must do nothing if the feature is not applied!
     /// </summary>
     void Remove();
 }
