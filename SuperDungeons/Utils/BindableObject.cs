@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace SuperDungeons;
+namespace SuperDungeons.Utils;
 
 public abstract class BindableObject : INotifyPropertyChanged
 {

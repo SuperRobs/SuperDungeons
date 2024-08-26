@@ -1,5 +1,6 @@
 ﻿using SuperDungeons.Model.Abilities;
 using SuperDungeons.Model.Classes;
+using SuperDungeons.Utils;
 
 namespace SuperDungeons.Model.Character;
 
