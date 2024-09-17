@@ -49,7 +49,7 @@ internal class ClassData : BindableObject
             return;
         }
         var subclassIdentifier = 
-            _choiceManager.GetNChoices(new FeatureIdentifier("subclass", _class.Name), 1).FirstOrDefault();
+            _choiceManager.GetNChosenFeatures(new FeatureIdentifier("subclass", _class.Name), 1).FirstOrDefault();
         if (subclassIdentifier == null)
         {
             _subclass = null;

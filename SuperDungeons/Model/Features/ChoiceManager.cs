@@ -8,36 +8,42 @@ public class ChoiceManager : BindableObject
 
     public void AddChoices(FeatureIdentifier feature, List<FeatureIdentifier> choicesToAdd)
     {
-        //for now this will create duplicates
-        //ToDo implement it so that there is only ever one FeatureChoice object per parent feature, this could
-        //also allow for simpler implementations for the other methods, because they can assume there's only one
-        _choices.Add(new FeatureChoice(feature, choicesToAdd));
+        var existingChoice = _choices.FirstOrDefault(c => c.Parent.Equals(feature));
+        if (existingChoice != null)
+        {
+            existingChoice.Choices.AddRange(choicesToAdd);
+        }
+        else
+        {
+            _choices.Add(new FeatureChoice(feature, choicesToAdd));
+        }
     }
 
     public void RemoveChoices(FeatureIdentifier feature, List<FeatureIdentifier> choicesToRemove)
     {
-        foreach (var choice in GetChoices(feature))
-        {
-            choice.Choices.RemoveAll(choicesToRemove.Contains);
-        }
+        GetChoice(feature)?.Choices.RemoveAll(choicesToRemove.Contains);
     }
     
     public bool HasChoice(FeatureIdentifier feature, FeatureIdentifier choice)
     {
-        return GetChoices(feature).Any(c => c.Choices.Contains(choice));
+        return GetChosenFeatures(feature).Contains(choice);
     }
 
-    public List<FeatureIdentifier> GetNChoices(FeatureIdentifier feature, int n)
+    public List<FeatureIdentifier> GetNChosenFeatures(FeatureIdentifier feature, int n)
+    {
+        return GetChosenFeatures(feature).Take(n).ToList();
+    }
+    
+    private List<FeatureIdentifier> GetChosenFeatures(FeatureIdentifier feature)
     {
         return _choices
             .Where(c => c.Parent.Equals(feature))
             .SelectMany(c => c.Choices)
-            .Take(n)
             .ToList();
     }
-    
-    private List<FeatureChoice> GetChoices(FeatureIdentifier feature)
+
+    private FeatureChoice? GetChoice(FeatureIdentifier feature)
     {
-        return _choices.Where(c => c.Parent.Equals(feature)).ToList();
+        return _choices.FirstOrDefault(c => c.Parent.Equals(feature));
     }
 }
