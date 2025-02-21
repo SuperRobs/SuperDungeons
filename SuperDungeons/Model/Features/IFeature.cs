@@ -3,7 +3,7 @@
 public interface IFeature
 {
     /// <summary>
-    /// the Identifier must always be unique across the entire application!
+    /// The Identifier must always be unique across the entire application!
     /// </summary>
     FeatureIdentifier Identifier { get; }
     string Description { get; }
