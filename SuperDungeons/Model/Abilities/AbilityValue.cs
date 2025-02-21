@@ -7,8 +7,7 @@ internal class AbilityValue
     //having a whole dictionary of multiple overrides might be excessive, generally it'd be difficult to acquire
     //multiple setters, but it's possible and the app needs to be prepared for that
     
-    //this stores fixed-value maximums (e.g. the standard 20, a hill
-    //giant strength's 21 or other magic items which increase the cap)
+    //this stores fixed-value buffs (e.g. a hill giant strength 21 or other magic items which increase the cap)
     //the highest of those should always be used
     private readonly Dictionary<AbilityBonusKey, uint> _overrides = new();
     //this stores bonuses to the fixed-value maximums, e.g. Tomes
@@ -55,26 +54,14 @@ internal class AbilityValue
 
     private uint GetHighestOverride(Ability ability)
     {
-        if (_overrides.Count == 0)
-        {
-            return _baseValues[ability];
-        }
-        uint currentMax = 0;
-        foreach (var keyValuePair in _overrides
-                     .Where(keyValuePair => keyValuePair.Value > currentMax 
-                                            && keyValuePair.Key.Ability.Equals(ability)))
-        {
-            currentMax = keyValuePair.Value;
-        }
-        return currentMax;
+        return _overrides.Count == 0 ? _baseValues[ability] : _overrides.Values.Max();
     }
 
     private int GetModifierSum(Ability ability)
     {
         return _modifiers
             .Where(modifier => modifier.Key.Ability.Equals(ability))
-            .Aggregate(0, (current, keyValuePair) 
-                => current + keyValuePair.Value);
+            .Aggregate(0, (current, keyValuePair) => current + keyValuePair.Value);
     }
     
     internal void AddFixedBound(AbilityBonusKey bonusKey, uint newCap)

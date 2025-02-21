@@ -1,35 +1,36 @@
-﻿using System.ComponentModel;
+/*
+using System.ComponentModel;
 using SuperDungeons.Model.Abilities;
 using SuperDungeons.Model.Classes;
 using SuperDungeons.Model.DataTypes.Enums;
+using SuperDungeons.Model.Proficiencies;
 
 namespace SuperDungeons.Model.Skills;
 
 //having individual skill objects allows for the user to add custom skills
 //Saving Throws are also considered skills
-public class Skill : BindableObject
+internal class Save : BindableObject
 {
     private readonly AbilityScores _scores;
-    private readonly ClassManager _classManager;
+    private readonly Proficiencies.Proficiencies _proficiencies;
 
-    public Skill(string identifier, Ability ability, AbilityScores scores, ClassManager overview)
+    public Save(Ability ability, AbilityScores scores, Proficiencies.Proficiencies proficiencies)
     {
         _scores = scores;
-        _classManager = overview;
-        Identifier = identifier;
+        _proficiencies = proficiencies;
         AssociatedAbility = ability;
 
         _scores.PropertyChanged += ScoresChanged;
-        _classManager.PropertyChanged += OverviewChanged;
+        _proficiencies.PropertyChanged += OverviewChanged;
     }
-
-    public string Identifier { get; }
-    // ReSharper disable once MemberCanBePrivate.Global
+    
+    private readonly string _identifier = AssociatedAbility + " Saving Throw";
+    
     public Ability AssociatedAbility { get; }
     public AdvantageType Advantage { get; set; }
     public ProficiencyType Proficiency { get; set; }
     
-    private Dictionary<string, int> _bonuses = [];
+    private readonly Dictionary<string, int> _bonuses = [];
 
     public void AddBonus(string source, int bonus)
     {
@@ -44,7 +45,7 @@ public class Skill : BindableObject
     public int GetModifier()
     {
         var abilityModifier = _scores.GetAbilityModifier(AssociatedAbility);
-        var proficiencyBonus = _classManager.GetProficiencyBonus();
+        var proficiencyBonus = _proficiencies.GetProficiencyBonus();
         switch (Proficiency)
         {
             case ProficiencyType.None:
@@ -67,24 +68,27 @@ public class Skill : BindableObject
         //they shouldn't get big enough for this cast to be a problem
         return (int)(abilityModifier + proficiencyBonus + otherBonuses);
     }
-
+    
+    
     private void ScoresChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == null) return;
         if (e.PropertyName.Equals(AssociatedAbility.ToString()))
         {
-            OnPropertyChanged(Identifier);
+            OnPropertyChanged(_identifier);
         }
     }
 
-    private void OverviewChanged(object? sender, PropertyChangedEventArgs e)
+    private void ProficienciesChanged(object? sender, PropertyChangedEventArgs e)
     {
         // ReSharper disable once ConvertIfStatementToSwitchStatement for consistency with other method where switch is
         // not possible
         if (e.PropertyName == null) return;
-        if (e.PropertyName.Equals(nameof(_classManager.GetProficiencyBonus)))
+        if (e.PropertyName.Equals(nameof(_proficiencies.GetProficiencyBonus)))
         {
-            OnPropertyChanged(Identifier);
+            OnPropertyChanged(_identifier);
         }
     }
+    
 }
+*/

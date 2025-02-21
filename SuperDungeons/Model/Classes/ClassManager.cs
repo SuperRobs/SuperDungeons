@@ -5,12 +5,12 @@ using SuperDungeons.Utils;
 
 namespace SuperDungeons.Model.Classes;
 
-public class ClassManager : BindableObject
+public class ClassManager(ClassRepository repository, ChoiceManager choiceManager) : BindableObject, IClassManager
 {
-    private readonly List<ClassData> _classes = [];
-    private readonly ChoiceManager _choiceManager = new();
-    
-    public uint GetProficiencyBonus()
+    //first class is primary
+    private readonly List<CharacterClass> _classes = [];
+
+    public uint GetCharacterProficiencyBonus()
     {
         return 2 + (GetCharacterLevel() - 1) / 4;
     }
@@ -22,22 +22,30 @@ public class ClassManager : BindableObject
         return (uint) _classes.Select(c => (int) c.Level).Sum();
     }
 
-    public List<string> GetClassNames()
+    public List<string> GetCharacterClassNames()
     {
         return _classes.Select(c => c.GetClassName()).ToList();
     }
 
-    public uint GetClassLevel(string className)
+    public uint GetCharacterClassLevel(string className)
     {
         return _classes.FirstOrDefault(c => c.GetClassName().Equals(className))?.Level ?? 0;
     }
 
-    public string GetSubclass(string className)
+    public string GetCharacterClassSubclass(string className)
     {
-        return _classes.FirstOrDefault(c => c.GetClassName().Equals(className))?.GetSubclassName() 
+        return _classes.FirstOrDefault(c => c.GetClassName().Equals(className))?.GetSubclassName()
                ?? string.Empty;
     }
+
+    public HashSet<CharacterClassOverview> GetAllClassInfo()
+    {
+        return GetCharacterClassNames()
+            .Select(c => new CharacterClassOverview(c, GetCharacterClassLevel(c), GetCharacterClassSubclass(c)))
+            .ToHashSet();
+    }
     
+    //catch updates from CharacterClass objects and distribute them further
     private void ClassChanged(object? sender, PropertyChangedEventArgs e)
     {
         OnPropertyChanged(nameof(e.PropertyName));
@@ -45,7 +53,7 @@ public class ClassManager : BindableObject
     
     /// <summary>
     /// adds the class to the character's list of classes
-    /// if the class already existed nothing happened, if the specified class does not exist nothing happens either
+    /// if the class already existed nothing happened, if the specified class does not exist, nothing happens either
     /// </summary>
     /// <param name="name"></param>
     /// <param name="level"></param>
@@ -56,14 +64,14 @@ public class ClassManager : BindableObject
             Debug.WriteLine($"Class {name} already exists");
             return;
         }
-        var @class = ClassUtils.GetClass(name);
+        var @class = repository.GetClass(name);
         if (@class is null)
         {
             Debug.WriteLine($"Class {name} does not exist");
             return;
         }
 
-        var data = ClassData.Create(@class, level, _choiceManager);
+        var data = CharacterClass.Create(@class, level, choiceManager, repository);
         data.PropertyChanged += ClassChanged;
         _classes.Add(data);
     }
@@ -76,22 +84,26 @@ public class ClassManager : BindableObject
     /// <param name="level"></param>
     public void UpdateClass(string name, uint level)
     {
-        if (ClassExists(name)) return;
-        FindClassData(name).Level = level;
+        if (level == 0)
+        {
+            RemoveClass(name);
+            return;
+        }
+        if (!repository.ClassExists(name)) return;
+        var classData = repository.GetClass(name);
+        if (classData is null)
+        {
+            Debug.WriteLine("FindClassData(" + name + ") could not be found");
+            return;
+        }
+        _classes.First(c => c.GetClassName().Equals(name)).Level = level;
     }
 
-    private bool ClassExists(string name)
+    public void RemoveClass(string name)
     {
-        return _classes.Any(c => c.GetClassName().Equals(name));
-    }
-    
-    private ClassData FindClassData(string name)
-    {
-        return _classes.First(c => c.GetClassName().Equals(name));
-    }
-
-    public List<IFeature> GetFeatures()
-    {
-        return _classes.SelectMany(c => c.GetClassFeatures()).ToList();
+        var @class = _classes.FirstOrDefault(c => c.GetClassName().Equals(name));
+        if (@class is null) return;
+        @class.PropertyChanged -= ClassChanged;
+        _classes.RemoveAll(c => c.GetClassName().Equals(name));
     }
 }

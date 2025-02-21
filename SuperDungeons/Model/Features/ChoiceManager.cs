@@ -6,27 +6,35 @@ public class ChoiceManager : BindableObject
 {
     private readonly List<FeatureChoice> _choices = [];
 
-    public void AddChoices(FeatureIdentifier feature, List<FeatureIdentifier> choicesToAdd)
+    public void AddChoices(FeatureChoice choice)
     {
-        var existingChoice = _choices.FirstOrDefault(c => c.Parent.Equals(feature));
-        if (existingChoice != null)
+        var existingFeatureChoice = _choices
+            .FirstOrDefault(c => c.Parent.Equals(choice.Parent));
+        if (existingFeatureChoice != null)
         {
-            existingChoice.Choices.AddRange(choicesToAdd);
+            _choices.Remove(existingFeatureChoice);
+            _choices.Add(existingFeatureChoice 
+                with { Choices = existingFeatureChoice.Choices.AddRange(choice.Choices) });
         }
         else
         {
-            _choices.Add(new FeatureChoice(feature, choicesToAdd));
+            _choices.Add(choice);
         }
     }
 
-    public void RemoveChoices(FeatureIdentifier feature, List<FeatureIdentifier> choicesToRemove)
+    public void RemoveChoices(FeatureChoice choice)
     {
-        GetChoice(feature)?.Choices.RemoveAll(choicesToRemove.Contains);
+        var existingFeatureChoice = _choices
+            .FirstOrDefault(c => c.Parent.Equals(choice.Parent));
+        if (existingFeatureChoice is null) return; //whole featureChoice doesn't exist
+        _choices.Remove(existingFeatureChoice);
+        _choices.Add(existingFeatureChoice with {Choices = existingFeatureChoice.Choices
+            .RemoveAll(choice.Choices.Contains)});
     }
     
-    public bool HasChoice(FeatureIdentifier feature, FeatureIdentifier choice)
+    public bool HasChoices(FeatureChoice choice)
     {
-        return GetChosenFeatures(feature).Contains(choice);
+        return choice.Choices.TrueForAll(c => GetChosenFeatures(choice.Parent).Contains(c));
     }
 
     public List<FeatureIdentifier> GetNChosenFeatures(FeatureIdentifier feature, int n)
@@ -40,10 +48,5 @@ public class ChoiceManager : BindableObject
             .Where(c => c.Parent.Equals(feature))
             .SelectMany(c => c.Choices)
             .ToList();
-    }
-
-    private FeatureChoice? GetChoice(FeatureIdentifier feature)
-    {
-        return _choices.FirstOrDefault(c => c.Parent.Equals(feature));
     }
 }

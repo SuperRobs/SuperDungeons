@@ -163,9 +163,9 @@ public class AbilityScoreTests
     {
         //Arrange
         AbilityScores scores = new(10, 10, 10, 10, 10, 10);
-        //Act
-        scores.AddBonus(BonusTargets.Score, BonusTypes.Fixed, Ability.Strength, new FeatureIdentifier("Test", "Tests"), -1);
         //Assert
+        Assert.Throws<ArgumentException>(() => scores.AddBonus(BonusTargets.Score, BonusTypes.Fixed, Ability.Strength,
+            new FeatureIdentifier("Test", "Tests"), -1));
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(10));
     }
     

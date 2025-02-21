@@ -1,5 +1,6 @@
 ﻿using SuperDungeons.Model.Abilities;
 using SuperDungeons.Model.Classes;
+using SuperDungeons.Model.Features;
 using SuperDungeons.Utils;
 
 namespace SuperDungeons.Model.Character;
@@ -13,6 +14,19 @@ public sealed class Character : BindableObject
 {
     private bool _hasInspiration;
     private string _name = "";
+
+    public Character()
+    {
+        _classRepository = new ClassRepository();
+        _choiceManager = new ChoiceManager();
+        AbilityScores = new AbilityScores(10, 10, 10, 10, 10, 10);
+        ClassManager = new ClassManager(_classRepository, _choiceManager);
+    }
+    
+    // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
+    private readonly ClassRepository _classRepository;
+    // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
+    private readonly ChoiceManager _choiceManager;
     
     public string Name
     {
@@ -36,6 +50,6 @@ public sealed class Character : BindableObject
 
     //ToDo make a characterBuilder or something to make a character with sensible values
     
-    public AbilityScores AbilityScores { get; } = new(10, 10, 10, 10, 10, 10);
-    public ClassManager ClassManager { get; } = new();
+    public AbilityScores AbilityScores { get; }
+    public ClassManager ClassManager { get; }
 }

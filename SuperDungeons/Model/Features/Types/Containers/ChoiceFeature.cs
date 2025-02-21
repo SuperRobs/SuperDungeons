@@ -22,8 +22,9 @@ public class ChoiceFeature(
     public void Apply()
     {
         var relevantFeatures = features
-                .Where(f => choiceManager.HasChoice(Identifier, f.Identifier))
+                .Where(f => choiceManager.HasChoices(new FeatureChoice(Identifier, [f.Identifier])))
                 .Take(NumberOfChoices);
+        
         foreach(var feature in relevantFeatures) feature.Apply();
     }
     

@@ -96,16 +96,16 @@ public class AbilityMaximumTests
     }
 
     [Test]
-    [Description("Negative override is not used")]
+    [Description("Negative override throws ArgumentException")]
     //the current implementation also writes a message to Debug, however that is not relevant to the functionality,
     //so I will not test it
     public void NegativeOverride()
     {
         //Arrange
         AbilityScores scores = new(30, 30, 30, 30, 30, 30);
-        //Act
-        scores.AddBonus(BonusTargets.Maximum, BonusTypes.Fixed, Ability.Strength, new FeatureIdentifier("Test", "Tests"), -1);
-        //Assert
+        Assert.Throws<ArgumentException>(() => 
+            scores.AddBonus(BonusTargets.Maximum, BonusTypes.Fixed, Ability.Strength, 
+                new FeatureIdentifier("Test", "Tests"), -1));
         Assert.That(scores.GetAbilityScore(Ability.Strength), Is.EqualTo(20));
     }
     

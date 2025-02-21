@@ -15,7 +15,7 @@ public class AbilityScores(
 {
     private readonly AbilityValue _scores = new(strength, dexterity, constitution, wisdom, intelligence, charisma);
     private readonly AbilityValue _maximum = new(20);
-    private readonly AbilityValue _minimum = new(1);
+    private readonly AbilityValue _minimum = new(0);
 
     public uint GetAbilityScore(Ability ability)
     {
@@ -35,7 +35,7 @@ public class AbilityScores(
     public void AddBonus(BonusTargets target, BonusTypes type, Ability ability, FeatureIdentifier source, int value)
     {
         //verify parameters
-        if (!VerifyParameters(target, type, source, value)) return;
+        VerifyParameters(target, type, source, value);
         var bonusTarget =  GetTargetedComponent(target);
         AbilityBonusKey key = new(ability, source);
         ApplyBonus(bonusTarget, key, type, value);
@@ -46,7 +46,7 @@ public class AbilityScores(
     public void RemoveBonus(BonusTargets target, BonusTypes type, Ability ability, FeatureIdentifier source)
     {
         //verify
-        if (!VerifyParameters(target, type, source)) return;
+        VerifyParameters(target, type, source);
         var bonusTarget =  GetTargetedComponent(target);
         AbilityBonusKey key = new(ability, source);
         RemoveBonus(bonusTarget, key, type);
@@ -61,39 +61,26 @@ public class AbilityScores(
         _minimum.Reset();
     }
 
-    private static bool VerifyParameters(BonusTargets target, BonusTypes type, FeatureIdentifier source, int value)
+    private static void VerifyParameters(BonusTargets target, BonusTypes type, FeatureIdentifier source, int value)
     {
-        if (!VerifyParameters(target, type, source))
-        {
-            return false;
-        }
+        VerifyParameters(target, type, source);
         
         if (type is BonusTypes.Fixed && value < 0)
         {
-            Debug.WriteLine(nameof(ApplyBonus) + "with BonusType.Fixed expected positive value, but got"
-                                               + value + "from source " + source);
-            return false;
+            throw new ArgumentException("A fixed BonusType cannot have a negative value", nameof(value));
         }
-
-        return true;
     }
     
-    private static bool VerifyParameters(BonusTargets target, BonusTypes type, FeatureIdentifier source)
+    private static void VerifyParameters(BonusTargets target, BonusTypes type, FeatureIdentifier source)
     {
         if (target is not (BonusTargets.Maximum or BonusTargets.Minimum or BonusTargets.Score))
         {
-            Debug.WriteLine(nameof(AddBonus) + " expected BonusTarget Minimum, Maximum or Score, got " + target +
-                            " from source " + source);
-            return false;
+            throw new ArgumentException(target+" is not currently supported");
         }
         if (type is not (BonusTypes.Change or BonusTypes.Fixed))
         {
-            Debug.WriteLine(nameof(AddBonus) + " expected BonusType Fixed or Change, got " + type +
-                            " from source " + source);
-            return false;
+            throw new ArgumentException(target + " is not currently supported");
         }
-
-        return true;
     }
     
     private AbilityValue GetTargetedComponent(BonusTargets target)
