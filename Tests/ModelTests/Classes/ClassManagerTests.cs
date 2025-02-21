@@ -206,6 +206,26 @@ public class ClassManagerTests
         Assert.That(actual, Is.EqualTo(2));
     }
     //GetCharacterProficiencyBonus ToDo 
+
+    [Test]
+    [Description("using GetCharacterProficiencyBonus on a level 1 character returns 2")]
+    public void GetProfLevel1()
+    {
+        ClassManager mgr = new(_classRepository, _emptyChoiceManager);
+        mgr.AddClass(Class1.Name, 1);
+        var actual = mgr.GetCharacterProficiencyBonus();
+        Assert.That(actual, Is.EqualTo(2));
+    }
+    
+    [Test]
+    [Description("using GetCharacterProficiencyBonus on a level 20 character returns 6")]
+    public void GetProfLevel20()
+    {
+        ClassManager mgr = new(_classRepository, _emptyChoiceManager);
+        mgr.AddClass(Class1.Name, 20);
+        var actual = mgr.GetCharacterProficiencyBonus();
+        Assert.That(actual, Is.EqualTo(6));
+    }
     
     
 }
