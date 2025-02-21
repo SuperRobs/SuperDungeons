@@ -89,13 +89,6 @@ public class ClassManager(ClassRepository repository, ChoiceManager choiceManage
             RemoveClass(name);
             return;
         }
-        if (!repository.ClassExists(name)) return;
-        var classData = repository.GetClass(name);
-        if (classData is null)
-        {
-            Debug.WriteLine("FindClassData(" + name + ") could not be found");
-            return;
-        }
         _classes.First(c => c.GetClassName().Equals(name)).Level = level;
     }
 
