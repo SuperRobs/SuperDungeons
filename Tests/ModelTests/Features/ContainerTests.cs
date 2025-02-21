@@ -98,23 +98,23 @@ public class ContainerTests
         //Assert
         subfeature.Verify(m => m.Remove(), Times.Once);
     }
-
+    
     [Test]
     [NUnit.Framework.Description("When a feature is active on a CharLRF and the level reduces, " +
                                  "but not below the threshold, it is not removed")]
     public void CharacterLevelRestrictedFeatureReduceLevelAboveThreshold()
     {
         //Arrange
-        //since mocking would be difficult here I'll use a real object
         var classManager = new Mock<IClassManager>();
         classManager.SetupSequence(m => m.GetCharacterLevel()).Returns(10).Returns(9);
         var subfeature = new Mock<IFeature>();
         var feature = new CharacterLevelRestrictedFeature
             (GenericIdentifier, GenericDescription, classManager.Object, 5, subfeature.Object);
+        feature.Apply();
         //Act
         classManager.Raise(m => m.PropertyChanged += null, new PropertyChangedEventArgs("Level"));
         //Assert
-        subfeature.Verify(m => m.Remove(), Times.Never);
+        subfeature.Verify(f => f.Remove(), Times.Never);
     }
     
     [Test]
@@ -223,6 +223,7 @@ public class ContainerTests
         var subfeature = new Mock<IFeature>();
         var feature = new ClassLevelRestrictedFeature
             (GenericIdentifier, GenericDescription, classManager.Object, "Class", 5, subfeature.Object);
+        feature.Apply();
         //Act
         classManager.Raise(m => m.PropertyChanged += null, new PropertyChangedEventArgs("Level"));
         //Assert
