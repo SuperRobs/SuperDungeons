@@ -2,7 +2,6 @@
 using SuperDungeons.Model.Abilities;
 using SuperDungeons.Model.DataTypes.Enums;
 using SuperDungeons.Model.Features;
-using SuperDungeons.Model.Proficiencies;
 
 namespace SuperDungeons.Model.Classes;
 
@@ -10,7 +9,7 @@ public record ClassData(
     string Name,
     DiceType HitDiceType,
     //Proficiencies
-    IImmutableSet<ArmorProficiencies> ArmorProficiencies,
+    IImmutableSet<string> ArmorProficiencies,
     IImmutableList<string> WeaponProficiencies,
     int NumberOfSkills,
     IImmutableList<string> PossibleSkills,
