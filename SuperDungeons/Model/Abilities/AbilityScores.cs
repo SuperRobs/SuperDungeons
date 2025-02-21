@@ -66,7 +66,7 @@ public class AbilityScores(
         
         if (type is BonusTypes.Fixed && value < 0)
         {
-            throw new ArgumentException("A fixed BonusType cannot have a negative value", nameof(value));
+            throw new ArgumentException("A fixed BonusType cannot have a negative value \nsource="+source, nameof(value));
         }
     }
     
@@ -74,11 +74,11 @@ public class AbilityScores(
     {
         if (target is not (BonusTargets.Maximum or BonusTargets.Minimum or BonusTargets.Score))
         {
-            throw new ArgumentException(target+" is not currently supported");
+            throw new ArgumentException(target+" is not currently supported \nsource="+source, nameof(target));
         }
         if (type is not (BonusTypes.Change or BonusTypes.Fixed))
         {
-            throw new ArgumentException(target + " is not currently supported");
+            throw new ArgumentException(target + " is not currently supported \nsource="+source, nameof(type));
         }
     }
     
