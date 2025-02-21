@@ -1,5 +1,3 @@
-using System.Windows.Input;
-
 namespace SuperDungeons.Model.Classes;
 
 public class ClassRepository
