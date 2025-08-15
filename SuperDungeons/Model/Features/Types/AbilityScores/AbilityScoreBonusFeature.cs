@@ -2,8 +2,8 @@ using SuperDungeons.Model.Abilities;
 
 namespace SuperDungeons.Model.Features.Types.AbilityScores;
 
-public class AbilityScoreBonusFeature(FeatureIdentifier identifier, string description, Ability ability, int bonus,
-    Abilities.AbilityScores scores) 
+public class AbilityScoreBonusFeature(FeatureIdentifier identifier, string description, Ability ability, int bonus, 
+    uint cap, Abilities.AbilityScores scores) 
     : IFeature
 {
     public FeatureIdentifier Identifier { get; } = identifier;
@@ -11,11 +11,11 @@ public class AbilityScoreBonusFeature(FeatureIdentifier identifier, string descr
 
     public void Apply()
     {
-        scores.AddBonus(BonusTargets.Score, BonusTypes.Change, ability, Identifier, bonus);
+        scores.AddBonus(ability, Identifier, new AbilityScoreBonus(bonus, cap));
     }
 
     public void Remove()
     {
-        scores.RemoveBonus(BonusTargets.Score, BonusTypes.Change, ability, Identifier);
+        scores.RemoveBonus(ability, Identifier);
     }
 }

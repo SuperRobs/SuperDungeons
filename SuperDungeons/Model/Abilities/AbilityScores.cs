@@ -1,4 +1,5 @@
-﻿using SuperDungeons.Model.Features;
+﻿using System.Collections.Immutable;
+using SuperDungeons.Model.Features;
 using SuperDungeons.Utils;
 
 namespace SuperDungeons.Model.Abilities;
@@ -10,121 +11,81 @@ public class AbilityScores(
     uint wisdom,
     uint intelligence,
     uint charisma)
-    : BindableObject
+    : BindableObject, IAbilityScores
 {
-    private readonly AbilityValue _scores = new(strength, dexterity, constitution, wisdom, intelligence, charisma);
-    private readonly AbilityValue _maximum = new(20);
-    private readonly AbilityValue _minimum = new(0);
+    //having a whole dictionary of multiple overrides might be excessive, generally it'd be difficult to acquire
+    //multiple setters, but it's possible and the app needs to be prepared for that.
+    
+    //this stores fixed-value buffs (e.g. a hill giant strength 21 or other magic items)
+    //the highest of those should always be used
+    private readonly Dictionary<AbilityBonusKey, uint> _overrides = new();
+    //this stores bonuses to the ability scores, e.g. Tomes
+    //as far as my rules-understanding goes, these do not stack on overrides
+    private readonly Dictionary<AbilityBonusKey, AbilityScoreBonus> _bonuses = [];
+    
+    private readonly ImmutableDictionary<Ability, uint> _baseValues = new Dictionary<Ability, uint>
+    {
+        [Ability.Strength] = strength,
+        [Ability.Dexterity] = dexterity,
+        [Ability.Constitution] = constitution,
+        [Ability.Wisdom] = wisdom,
+        [Ability.Intelligence] = intelligence,
+        [Ability.Charisma] = charisma
+    }.ToImmutableDictionary();
 
     public uint GetAbilityScore(Ability ability)
     {
-        var minimum = _minimum.GetBound(ability);
-        var actualScore = _scores.GetBound(ability);
-        var maximum = _maximum.GetBound(ability);
-        //I'll let the minimum override the maximum if they conflict, because I think in edge cases one should rule
-        //whatever is best for the players, however this should not normally happen
-        return Math.Max(Math.Min(actualScore, maximum), minimum);
+        //ToDo I'm very sure there are edge cases here that I haven't tested yet, especially regarding negative values
+        var highestOverride = _overrides.Values.Max();
+        //casting so negative values don't get Lost
+        //the first ordering makes sure that bonuses are added in order of caps. Otherwise a +2 bonus with a cap of 24
+        //could push the total to 20 and then a +2 with a cap of 20 would keep it at 20, however the other way around
+        //it would be 22
+        //the second ordering just ensures all negative values (which must always have cap 0, enforced by AddBonus)
+        //are added before anything else for similarly unlikely cases
+        var maxWithBonuses = _bonuses.Values.ToList()
+            .OrderBy(b => b.Cap)
+            .ThenBy(b => b.Value)
+            .Aggregate((int)_baseValues[ability], (current, bonus) => (int)Math.Min(current + bonus.Value, bonus.Cap));
+        var totalMax = Math.Max(maxWithBonuses, highestOverride);
+        //prevent issues if total score would be negative
+        return (uint) Math.Max(totalMax, 0);
     }
-
+    
     public int GetAbilityModifier(Ability ability)
     {
         return (int)Math.Floor(((int)GetAbilityScore(ability) - 10) / 2.0);
     }
-    
-    public void AddBonus(BonusTargets target, BonusTypes type, Ability ability, FeatureIdentifier source, int value)
+
+
+    public void AddOverride(Ability ability, FeatureIdentifier source, uint value)
     {
-        //verify parameters
-        VerifyParameters(target, type, source, value);
-        var bonusTarget =  GetTargetedComponent(target);
         AbilityBonusKey key = new(ability, source);
-        ApplyBonus(bonusTarget, key, type, value);
-        //any of those may change the ability score and the score should be the only thing relevant to other classes
+        _overrides[key] = value;
         OnPropertyChanged(ability.ToString());
     }
 
-    public void RemoveBonus(BonusTargets target, BonusTypes type, Ability ability, FeatureIdentifier source)
+    public void AddBonus(Ability ability, FeatureIdentifier source, AbilityScoreBonus bonus)
     {
-        //verify
-        VerifyParameters(target, type, source);
-        var bonusTarget =  GetTargetedComponent(target);
+        //for negative bonuses always make the cap 0, so they are evaluated first
+        if (bonus.Value < 0) bonus = 
+            bonus with { Cap = 0 };
         AbilityBonusKey key = new(ability, source);
-        RemoveBonus(bonusTarget, key, type);
-        //any of those may change the ability score and the score should be the only thing relevant to other classes
+        _bonuses[key] = bonus;
         OnPropertyChanged(ability.ToString());
     }
-    
-    public void Reset()
+
+    public void RemoveOverride(Ability ability, FeatureIdentifier source)
     {
-        _scores.Reset();
-        _maximum.Reset();
-        _minimum.Reset();
+        AbilityBonusKey key = new(ability, source);
+        _overrides.Remove(key);
+        OnPropertyChanged(ability.ToString());
     }
 
-    private static void VerifyParameters(BonusTargets target, BonusTypes type, FeatureIdentifier source, int value)
+    public void RemoveBonus(Ability ability, FeatureIdentifier source)
     {
-        VerifyParameters(target, type, source);
-        
-        if (type is BonusTypes.Fixed && value < 0)
-        {
-            throw new ArgumentException("A fixed BonusType cannot have a negative value \nsource="+source, nameof(value));
-        }
-    }
-    
-    private static void VerifyParameters(BonusTargets target, BonusTypes type, FeatureIdentifier source)
-    {
-        if (target is not (BonusTargets.Maximum or BonusTargets.Minimum or BonusTargets.Score))
-        {
-            throw new ArgumentException(target+" is not currently supported \nsource="+source, nameof(target));
-        }
-        if (type is not (BonusTypes.Change or BonusTypes.Fixed))
-        {
-            throw new ArgumentException(target + " is not currently supported \nsource="+source, nameof(type));
-        }
-    }
-    
-    private AbilityValue GetTargetedComponent(BonusTargets target)
-    {
-        var bonusTarget = target switch
-        {
-            BonusTargets.Maximum => _maximum,
-            BonusTargets.Minimum => _minimum,
-            BonusTargets.Score => _scores,
-            _ => throw new ArgumentOutOfRangeException(nameof(target), target, nameof(GetTargetedComponent))
-        };
-        return bonusTarget;
-    }
-
-    private static void ApplyBonus(AbilityValue target, AbilityBonusKey key, BonusTypes type, int value)
-    {
-        switch (type)
-        {
-            case BonusTypes.Fixed:
-                if (value < 0) return;
-                target.AddFixedBound(key, (uint) value);
-                break;
-            case BonusTypes.Change:
-                target.AddBonus(key, value);
-                break;
-            default:
-                //there is currently no other type defined, but who knows what could happen in the future
-                throw new ArgumentOutOfRangeException(nameof(type), type, nameof(RemoveBonus));
-        }
-    }
-
-    //returns true if it was successfully, false if not
-    private static void RemoveBonus(AbilityValue target, AbilityBonusKey key, BonusTypes type)
-    {
-        switch (type)
-        {
-            case BonusTypes.Fixed:
-                target.RemoveFixedBound(key);
-                break;
-            case BonusTypes.Change:
-                target.RemoveBonus(key);
-                break;
-            default:
-                //there is currently no other type defined, but who knows what could happen in the future
-                throw new ArgumentOutOfRangeException(nameof(type), type, nameof(RemoveBonus));
-        }
+        AbilityBonusKey key = new(ability, source);
+        _bonuses.Remove(key);
+        OnPropertyChanged(ability.ToString());
     }
 }

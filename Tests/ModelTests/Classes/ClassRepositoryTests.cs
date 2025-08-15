@@ -168,7 +168,7 @@ public class ClassRepositoryTests
 
     //the feature is just so that they are not equal
     private static readonly SubclassData Subclass1BForClass1 = new SubclassData("SomeNameSub", ClassData1.Name,
-        [new AbilityScoreBonusFeature(new FeatureIdentifier("", ""), "", Ability.Charisma, 0, new AbilityScores(0,0,0,0,0,0))]);
+        [new AbilityScoreBonusFeature(new FeatureIdentifier("", ""), "", Ability.Charisma, 0, 20, new AbilityScores(0,0,0,0,0,0))]);
 
     [Test]
     [Description("On Construction GetSubClassNames for an arbitrary class name returns an empty list")]

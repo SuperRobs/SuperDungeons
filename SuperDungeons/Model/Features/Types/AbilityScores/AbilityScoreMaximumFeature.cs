@@ -2,7 +2,7 @@ using SuperDungeons.Model.Abilities;
 
 namespace SuperDungeons.Model.Features.Types.AbilityScores;
 
-public class AbilityScoreMaximumFeature(FeatureIdentifier identifier, string description, Ability ability, uint value,
+public class AbilityScoreOverrideFeature(FeatureIdentifier identifier, string description, Ability ability, uint value,
     Abilities.AbilityScores scores) 
     : IFeature
 {
@@ -11,11 +11,11 @@ public class AbilityScoreMaximumFeature(FeatureIdentifier identifier, string des
 
     public void Apply()
     {
-        scores.AddBonus(BonusTargets.Maximum, BonusTypes.Fixed, ability, Identifier, (int) value);
+        scores.AddOverride(ability, Identifier, value);
     }
 
     public void Remove()
     {
-        scores.RemoveBonus(BonusTargets.Maximum, BonusTypes.Fixed, ability, Identifier);
+        scores.RemoveOverride(ability, Identifier);
     }
 }
