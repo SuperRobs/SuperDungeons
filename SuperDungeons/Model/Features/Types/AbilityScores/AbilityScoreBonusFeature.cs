@@ -11,7 +11,7 @@ public class AbilityScoreBonusFeature(FeatureIdentifier identifier, string descr
 
     public void Apply()
     {
-        scores.AddBonus(ability, Identifier, new AbilityScoreBonus(bonus, cap));
+        scores.AddBonus(ability, Identifier, bonus, cap);
     }
 
     public void Remove()

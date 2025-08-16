@@ -35,18 +35,35 @@ public class AbilityScores(
 
     public uint GetAbilityScore(Ability ability)
     {
-        //ToDo I'm very sure there are edge cases here that I haven't tested yet, especially regarding negative values
-        var highestOverride = _overrides.Values.Max();
+        var highestOverride = _overrides.Where(o => o.Key.Ability==ability).Select(o => o.Value).DefaultIfEmpty().Max();
         //casting so negative values don't get Lost
         //the first ordering makes sure that bonuses are added in order of caps. Otherwise a +2 bonus with a cap of 24
         //could push the total to 20 and then a +2 with a cap of 20 would keep it at 20, however the other way around
         //it would be 22
         //the second ordering just ensures all negative values (which must always have cap 0, enforced by AddBonus)
-        //are added before anything else for similarly unlikely cases
-        var maxWithBonuses = _bonuses.Values.ToList()
+        //are added before anything else so any possible positive bonuses are applied correctly
+        var applicableBonuses = _bonuses
+            .Where(b => b.Key.Ability == ability)
+            .Select(b => b.Value).ToList()
             .OrderBy(b => b.Cap)
-            .ThenBy(b => b.Value)
-            .Aggregate((int)_baseValues[ability], (current, bonus) => (int)Math.Min(current + bonus.Value, bonus.Cap));
+            .ThenBy(b => b.Value);
+        var maxWithBonuses = (int) _baseValues[ability];
+        foreach (var bonus in applicableBonuses)
+        {
+            //negative values are always applied, they cannot violate a cap per definition and since we gave them the
+            //placeholder cap 0 this is necessary so they aren't just ignored
+            if (bonus.Value < 0)
+            {
+                maxWithBonuses += bonus.Value;
+                continue;
+            }
+            //this makes sure we don't accidentally replace our current maximum with the cap of some low-capped bonus
+            if(maxWithBonuses < bonus.Cap)
+            {
+                maxWithBonuses = (int) Math.Min(maxWithBonuses + bonus.Value, bonus.Cap);
+            }
+
+        }
         var totalMax = Math.Max(maxWithBonuses, highestOverride);
         //prevent issues if total score would be negative
         return (uint) Math.Max(totalMax, 0);
@@ -65,13 +82,12 @@ public class AbilityScores(
         OnPropertyChanged(ability.ToString());
     }
 
-    public void AddBonus(Ability ability, FeatureIdentifier source, AbilityScoreBonus bonus)
+    public void AddBonus(Ability ability, FeatureIdentifier source, int bonus, uint cap = 20)
     {
         //for negative bonuses always make the cap 0, so they are evaluated first
-        if (bonus.Value < 0) bonus = 
-            bonus with { Cap = 0 };
+        if (bonus < 0) cap = 0;
         AbilityBonusKey key = new(ability, source);
-        _bonuses[key] = bonus;
+        _bonuses[key] = new AbilityScoreBonus(bonus, cap);
         OnPropertyChanged(ability.ToString());
     }
 
