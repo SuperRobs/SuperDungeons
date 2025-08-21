@@ -1,4 +1,5 @@
-﻿using SuperDungeons.Model.Features;
+﻿using SuperDungeons.Model.Rules.Features;
+
 // ReSharper disable InconsistentNaming
 
 namespace Tests.ModelTests.Features;

@@ -1,6 +1,5 @@
-﻿using NuGet.Frameworks;
-using SuperDungeons.Model.Abilities;
-using SuperDungeons.Model.Features;
+﻿using SuperDungeons.Model.Character.Abilities;
+using SuperDungeons.Model.Rules.Features;
 using Tests.ModelTests.Features;
 
 namespace Tests.ModelTests.Abilities;
@@ -370,6 +369,47 @@ public class AbilityScoreTests
         var actual = scores.GetAbilityScore(Ability.Strength);
         Assert.That(actual, Is.EqualTo(12));
     }
+    //PropertyChanged triggers
+    //Whether PropertyChanged is called when the value doesn't change is undefined
+    [Test]
+    public void PropertyChangedOnBonusAdded()
+    {
+        var scores =AbilityScoreFactory.AllTen();
+        var propertyChanged = false;
+        scores.PropertyChanged += (_, _) => propertyChanged = true;
+        scores.AddBonus(Ability.Strength, _id, 2);
+        Assert.That(propertyChanged, Is.True);
+    }
     
+    [Test]
+    public void PropertyChangedOnBonusRemoved()
+    {
+        var scores =AbilityScoreFactory.AllTen();
+        var propertyChanged = false;
+        scores.AddBonus(Ability.Strength, _id, 2);
+        scores.PropertyChanged += (_, _) => propertyChanged = true;
+        scores.RemoveBonus(Ability.Strength, _id);
+        Assert.That(propertyChanged, Is.True);
+    }
 
+    [Test]
+    public void PropertyChangedOnOverrideAdded()
+    {
+        var scores =AbilityScoreFactory.AllTen();
+        var propertyChanged = false;
+        scores.PropertyChanged += (_, _) => propertyChanged = true;
+        scores.AddOverride(Ability.Strength, _id, 20);
+        Assert.That(propertyChanged, Is.True);
+    }
+    
+    [Test]
+    public void PropertyChangedOnOverrideRemoved()
+    {
+        var scores =AbilityScoreFactory.AllTen();
+        var propertyChanged = false;
+        scores.AddOverride(Ability.Strength, _id, 20);
+        scores.PropertyChanged += (_, _) => propertyChanged = true;
+        scores.RemoveOverride(Ability.Strength, _id);
+        Assert.That(propertyChanged, Is.True);
+    }
 }
