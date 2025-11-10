@@ -3,7 +3,7 @@ using SuperDungeons.Model.Abilities;
 namespace SuperDungeons.Model.Features.Types.AbilityScores;
 
 public class AbilityScoreBonusFeature(FeatureIdentifier identifier, string description, Ability ability, int bonus, 
-    uint cap, Abilities.AbilityScores scores) 
+    uint cap, IAbilityScores scores) 
     : IFeature
 {
     public FeatureIdentifier Identifier { get; } = identifier;

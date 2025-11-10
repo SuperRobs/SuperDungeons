@@ -4,12 +4,12 @@ using SuperDungeons.Utils;
 
 namespace SuperDungeons.Model.Abilities;
 
-public class AbilityScores(
+internal class AbilityScores(
     uint strength,
     uint dexterity,
     uint constitution,
-    uint wisdom,
     uint intelligence,
+    uint wisdom,
     uint charisma)
     : BindableObject, IAbilityScores
 {

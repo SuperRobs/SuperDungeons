@@ -3,6 +3,7 @@ using SuperDungeons.Model.Classes;
 using SuperDungeons.Model.DataTypes.Enums;
 using SuperDungeons.Model.Features;
 using SuperDungeons.Model.Features.Types.AbilityScores;
+using Tests.ModelTests.Abilities;
 
 namespace Tests.ModelTests.Classes;
 
@@ -168,7 +169,7 @@ public class ClassRepositoryTests
 
     //the feature is just so that they are not equal
     private static readonly SubclassData Subclass1BForClass1 = new SubclassData("SomeNameSub", ClassData1.Name,
-        [new AbilityScoreBonusFeature(new FeatureIdentifier("", ""), "", Ability.Charisma, 0, 20, new AbilityScores(0,0,0,0,0,0))]);
+        [new AbilityScoreBonusFeature(new FeatureIdentifier("", ""), "", Ability.Charisma, 0, 20, AbilityScoreFactory.AllZero())]);
 
     [Test]
     [Description("On Construction GetSubClassNames for an arbitrary class name returns an empty list")]

@@ -3,7 +3,7 @@ using SuperDungeons.Model.Abilities;
 namespace SuperDungeons.Model.Features.Types.AbilityScores;
 
 public class AbilityScoreOverrideFeature(FeatureIdentifier identifier, string description, Ability ability, uint value,
-    Abilities.AbilityScores scores) 
+    IAbilityScores scores) 
     : IFeature
 {
     public FeatureIdentifier Identifier { get; } = identifier;

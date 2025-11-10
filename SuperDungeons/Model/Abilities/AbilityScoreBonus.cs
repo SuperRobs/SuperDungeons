@@ -1,5 +1,5 @@
 ﻿namespace SuperDungeons.Model.Abilities;
 
-public record AbilityScoreBonus(int Value, uint Cap = 20)
+internal record AbilityScoreBonus(int Value, uint Cap = 20)
 {
 }

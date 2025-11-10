@@ -50,6 +50,6 @@ public sealed class Character : BindableObject
 
     //ToDo make a characterBuilder or something to make a character with sensible values
     
-    public AbilityScores AbilityScores { get; }
+    public IAbilityScores AbilityScores { get; }
     public ClassManager ClassManager { get; }
 }
