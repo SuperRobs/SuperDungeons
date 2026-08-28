@@ -6,7 +6,7 @@ public static class AbilityScoreFactory
 {
     public static IAbilityScores SimpleAbilityScores(uint values)
     {
-        return new AbilityScores(values, values, values, values, values, values);
+        return AbilityScoresBuilder.GetAbilityScores(values, values, values, values, values, values);
     }
 
     public static IAbilityScores AllZero() {
