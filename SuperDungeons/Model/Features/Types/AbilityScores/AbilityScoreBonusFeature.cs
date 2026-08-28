@@ -1,4 +1,5 @@
-using SuperDungeons.Model.Abilities;
+using SuperDungeons.Model.Character.Abilities;
+using SuperDungeons.Model.Rules.Features;
 
 namespace SuperDungeons.Model.Features.Types.AbilityScores;
 
