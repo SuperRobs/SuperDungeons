@@ -2,8 +2,13 @@
 
 namespace Tests.ModelTests.Classes;
 
-public class ClassFactory
+public class CharacterClassFactory
 {
+    public static ICharacterClasses GetUninitialised()
+    {
+        return new CharacterClasses();
+    }
+    
     public static ICharacterClasses GetSingleClass(string className, uint level)
     {
         var classes = new CharacterClasses();

@@ -4,8 +4,12 @@ namespace SuperDungeons.Model.Character.Classes;
 
 public class CharacterClasses : BindableObject, ICharacterClasses
 {
-    //first class in this list is primary class, beyond that it is arbitrarily ordered
+    //first class in this list is primary class, beyond that order is arbitrary
+    //This may never be empty
     private List<CharacterClass> _classes = [];
+    
+    //for now this is just internal
+    private readonly uint _maxlevel = 20;
 
     public uint GetProficiencyBonus()
     {
@@ -32,18 +36,25 @@ public class CharacterClasses : BindableObject, ICharacterClasses
     {
         return _classes.FirstOrDefault(c => c.ClassName == className)?.Level ?? 0;
     }
-
-    public string GetSubclass(string parentName)
-    {
-        return _classes.FirstOrDefault(c => c.ClassName == parentName)?.SubclassName ?? string.Empty;
-    }
     
+    //ToDo check if class exists
     public void AddClass(string name, uint level)
     {
         if (_classes.Any(c => c.ClassName == name))
         {
             throw new ArgumentException("Character Already has a class with the given name.");
         }
+
+        if (level == 0)
+        {
+            throw new ArgumentException("A Class level cannot be 0, use RemoveClass instead.");
+        }
+        
+        if (level + _getCharacterLevelWithoutClass(name) > _maxlevel)
+        {
+            throw new ArgumentException("Total Character Level cannot exceed 20");
+        }
+        
         _classes.Add(new CharacterClass(name, level));
         OnPropertyChanged("Classes");
     }
@@ -55,11 +66,17 @@ public class CharacterClasses : BindableObject, ICharacterClasses
         {
             throw new ArgumentException("Character does not have a class with the given name.");
         }
-
-        if (newLevel < 3)
+        
+        if (newLevel == 0)
         {
-            @class.SubclassName = null;
+            throw new ArgumentException("A Class level cannot be 0, use RemoveClass instead.");
         }
+        
+        if (newLevel + _getCharacterLevelWithoutClass(className) > _maxlevel)
+        {
+            throw new ArgumentException("Total Character Level cannot exceed 20");
+        }
+        
         @class.Level = newLevel;
         OnPropertyChanged("Classes");
     }
@@ -80,57 +97,20 @@ public class CharacterClasses : BindableObject, ICharacterClasses
         {
             throw new ArgumentException("Character does not have a class with the given name.");
         }
+
+        if (_classes.Count == 1)
+        {
+            throw new ArgumentException("Cannot remove last Character Class.");
+        }
         _classes.RemoveAll(c => c.ClassName == className);
         OnPropertyChanged("Classes");
     }
 
-    public void AddSubclass(string parent, string name)
+    private uint _getCharacterLevelWithoutClass(string className)
     {
-        var @class = _classes.FirstOrDefault(c => c.ClassName == parent);
-        if (@class == null)
-        {
-            throw new ArgumentException("Character does not have a class with the given name.");
-        }
-        if (@class.Level < 3)
-        {
-            throw new ArgumentException("Character level too low to get a subclass");
-        }
-        @class.SubclassName = name;
-        OnPropertyChanged("Subclasses");
-    }
-
-    public void ChangeSubclass(string parent, string name)
-    {
-        var @class = _classes.FirstOrDefault(c => c.ClassName == parent);
-        if (@class == null)
-        {
-            throw new ArgumentException("Character does not have a class with the given name.");
-        }
-
-        if (@class.SubclassName == null)
-        {
-            throw new ArgumentException("Character didn't have a subclass for the given class name before");
-        }
-
-        @class.SubclassName = name;
-        OnPropertyChanged("Subclasses");
-    }
-
-    public void RemoveSubclass(string parent)
-    {
-        var @class = _classes.FirstOrDefault(c => c.ClassName == parent);
-        if (@class == null)
-        {
-            throw new ArgumentException("Character does not have a class with the given name.");
-        }
-        @class.SubclassName = null;
-        OnPropertyChanged("Subclasses");
-    }
-    
-    public void Reset()
-    {
-        _classes = [];
-        OnPropertyChanged("Classes");
-        OnPropertyChanged("Subclasses");
+        
+        //unfortunately Sum doesn't work with uint, so I need to cast it back and forth here
+        return (uint) _classes.Where(c => c.ClassName != className)
+            .Select(c => (int) c.Level).Sum();
     }
 }

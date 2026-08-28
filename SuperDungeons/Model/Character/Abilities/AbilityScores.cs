@@ -104,4 +104,6 @@ public class AbilityScores(
         _bonuses.Remove(key);
         OnPropertyChanged(ability.ToString());
     }
+
+    // TODO add event listener to trigger death if an AS reaches 0
 }
