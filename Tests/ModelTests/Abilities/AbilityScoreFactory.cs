@@ -1,4 +1,4 @@
-﻿using SuperDungeons.Model.Character.Abilities;
+﻿using Model.Character.Abilities;
 
 namespace Tests.ModelTests.Abilities;
 

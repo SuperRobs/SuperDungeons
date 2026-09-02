@@ -1,4 +1,4 @@
-﻿using SuperDungeons.Model.Rules.Features;
+﻿using Model.Rules.Features;
 
 // ReSharper disable InconsistentNaming
 

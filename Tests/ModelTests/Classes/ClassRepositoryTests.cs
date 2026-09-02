@@ -1,5 +1,5 @@
-using SuperDungeons.Model.Rules.Classes;
-using SuperDungeons.Model.Rules.DataTypes.Enums;
+using Model.Rules.Classes;
+using Model.Rules.DataTypes.Enums;
 
 namespace Tests.ModelTests.Classes;
 

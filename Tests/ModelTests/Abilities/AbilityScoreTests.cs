@@ -1,5 +1,5 @@
-﻿using SuperDungeons.Model.Character.Abilities;
-using SuperDungeons.Model.Rules.Features;
+﻿using Model.Character.Abilities;
+using Model.Rules.Features;
 using Tests.ModelTests.Features;
 
 namespace Tests.ModelTests.Abilities;

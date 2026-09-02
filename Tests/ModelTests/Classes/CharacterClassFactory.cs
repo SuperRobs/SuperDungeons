@@ -1,4 +1,4 @@
-﻿using SuperDungeons.Model.Character.Classes;
+﻿using Model.Character.Classes;
 
 namespace Tests.ModelTests.Classes;
 
